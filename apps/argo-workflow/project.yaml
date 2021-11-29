@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: argo-workflow
+spec:
+  sourceRepos:
+  - https://github.com/vgunapati-demo/argo-workflow.git
+  destinations:
+  - server: "*"
+    namespace: workflow
+  - server: "*"
+    namespace: default
+  - server: https://kubernetes.default.svc
+    namespace: argocd
+  description: Addon argo-workflow
+  clusterResourceWhitelist:
+  - group: "*"
+    kind: "*"
+  roles:
+  # A role which provides read-only access to all applications in the project
+  - name: admin
+    policies:
+    - p, proj:argo-workflow:admin, applications, *, argo-workflow/*, allow
+    groups:
+    - vgunapati-demo:platform-eng

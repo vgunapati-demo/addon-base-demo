@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: event-router
+spec:
+  sourceRepos:
+  - https://github.com/vgunapati-demo/event-router.git
+  destinations:
+  - server: "*"
+    namespace: event-router
+  - server: https://kubernetes.default.svc
+    namespace: argocd
+  description: Addon event-router
+  roles:
+  # A role which provides read-only access to all applications in the project
+  - name: admin
+    policies:
+    - p, proj:event-router:admin, applications, *, event-router/*, allow
+    groups:
+    - vgunapati-demo:event-router

@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform-eng
+spec:
+  sourceRepos:
+  - https://github.com/vgunapati-demo/platform-eng-demo
+  destinations:
+  - server: "*"
+    namespace: "*"
+  - server: https://kubernetes.default.svc
+    namespace: argocd
+  description: Cluster App platform-eng
+  clusterResourceWhitelist:
+  - group: "*"
+    kind: "*"
+  roles:
+  # A role which provides read-only access to all applications in the project
+  - name: admin
+    policies:
+    - p, proj:platform-eng:admin, applications, *, platform-eng/*, allow
+    groups:
+    - vgunapati-demo:platform-eng
